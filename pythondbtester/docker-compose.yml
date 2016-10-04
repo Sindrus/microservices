@@ -1,0 +1,9 @@
+version: '2'
+services:
+  pythondbtester:
+    image: sindrus/pythondbtester:v1
+
+networks:
+  default:
+    external:
+      name: "psqltodo_default"
