@@ -1,0 +1,4 @@
+version: '2'
+services:
+  psql:
+    image: sindrus/psql_todo:v1
