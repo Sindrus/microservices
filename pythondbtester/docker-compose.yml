@@ -1,7 +1,8 @@
 version: '2'
 services:
   pythondbtester:
-    image: sindrus/pythondbtester:v1
+#    image: sindrus/pythondbtester:v1
+    build: .
 
 networks:
   default:

@@ -1,7 +1,8 @@
 import psycopg2
 print("Connecting to Postgres...")
 
-conn_string = "host='psqltodo_psql_1' dbname='todo' user='postgres'"
+conn_string = "host='psqltodo' dbname='todo' user='postgres'"
+print("conn string", conn_string)
 conn = psycopg2.connect(conn_string)
 
 cur = conn.cursor()
