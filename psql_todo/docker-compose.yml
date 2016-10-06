@@ -4,3 +4,4 @@ services:
     image: sindrus/psql_todo:v1
     ports:
       - "5432:5432"
+    container_name: "psqltodo"
