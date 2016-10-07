@@ -4,6 +4,8 @@
 /*jshint newcap:false */
 var app = app || {};
 
+var backendIP = 'http://172.17.0.1:8080';
+
 (function () {
 	'use strict';
 
@@ -19,54 +21,41 @@ var app = app || {};
 		this.key = key;
 		this.todos = [];
         $.ajax({
-          url: 'http://172.17.0.1:8080/api/backend/todos/',
+          url: backendIP+'/api/backend/todos/',
           dataType: 'json',
           type: 'GET',
           success: function(data){
               scope.todos = scope.todos.concat(data.map(function(d){
                 return {
-                  // note_id: d.id,
-                  done: d.done,
+                  todo_id: d.todo_id,
+                  completed: d.done,
                   title: d.note
                 }
               }));
+		      scope.todos = scope.todos.map(function (todo) {
+                return todo !== data ?
+                todo :
+                Utils.extend({}, todo, {completed: !todo.completed});
+              });
               scope.inform();
           }
         });
 	};
 
 	app.TodoModel.prototype.subscribe = function (onChange) {
-        console.log("subscribe");
 		this.onChanges.push(onChange);
 	};
 
 	app.TodoModel.prototype.inform = function () {
-        console.log("inform");
 		//Utils.store(this.key, this.todos);
 		this.onChanges.forEach(function (cb) { cb(); });
 	};
 
-    app.TodoModel.prototype.appendToList = function(appendList) {
-      console.log("Appending");
-      console.log(this.todos);
-      this.todos = this.todos.concat(appendList);
-      console.log("done appending");
-      console.log(this.todos);
-    }
-
 	app.TodoModel.prototype.addTodo = function (title) {
-        console.log("addtodo");
-		this.todos = this.todos.concat({
-			id: Utils.uuid(),
-			title: title,
-			completed: false
-		});
+        var scope = this;
 
-		this.inform();
-        console.log("New todo");
-        console.log(title);
         $.ajax({
-          url: 'http://172.17.0.1:8080/api/backend/todos/',
+          url: backendIP+'/api/backend/todos/',
           dataType: 'json',
           type: 'POST',
           headers: {
@@ -77,14 +66,19 @@ var app = app || {};
               done: false
           }),
           success: function(data){
-              console.log("Completed post");
-              console.log(data);
+            console.log("Completed post");
+            console.log(data);
+            scope.todos = scope.todos.concat({
+              todo_id: data.todo_id,
+              title: data.note,
+              completed: false
+            });
+		    scope.inform();
           }
         });
 	};
 
 	app.TodoModel.prototype.toggleAll = function (checked) {
-        console.log("toggleAll");
 		// Note: it's usually better to use immutable data structures since they're
 		// easier to reason about and React works very well with them. That's why
 		// we use map() and filter() everywhere instead of mutating the array or
@@ -97,18 +91,40 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
-        console.log("Toggle");
 		this.todos = this.todos.map(function (todo) {
 			return todo !== todoToToggle ?
 				todo :
 				Utils.extend({}, todo, {completed: !todo.completed});
 		});
+        todoToToggle.completed =! todoToToggle.completed;
+
+        $.ajax({
+          url: backendIP+'/api/backend/todos/'+todoToToggle.todo_id,
+          dataType: 'json',
+          type: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          data: JSON.stringify({
+              done: todoToToggle.completed,
+              note: todoToToggle.title,
+              todo_id: todoToToggle.todo_id
+          }),
+          success: function(data){
+              console.log("Completed post");
+              console.log(data);
+          }
+        });
 
 		this.inform();
 	};
 
 	app.TodoModel.prototype.destroy = function (todo) {
-        console.log("destroy");
+        $.ajax({
+          url: backendIP+'/api/backend/todos/'+todo.todo_id,
+          type: 'DELETE',
+        });
+
 		this.todos = this.todos.filter(function (candidate) {
 			return candidate !== todo;
 		});
@@ -117,7 +133,6 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.save = function (todoToSave, text) {
-        console.log("save");
 		this.todos = this.todos.map(function (todo) {
 			return todo !== todoToSave ? todo : Utils.extend({}, todo, {title: text});
 		});
@@ -126,7 +141,6 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.clearCompleted = function () {
-        console.log("clearCompleted");
 		this.todos = this.todos.filter(function (todo) {
 			return !todo.completed;
 		});
