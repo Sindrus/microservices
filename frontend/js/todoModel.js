@@ -4,7 +4,7 @@
 /*jshint newcap:false */
 var app = app || {};
 
-var backendIP = 'http://172.17.0.1:8080';
+var backendIP = 'http://192.168.65.60:8080';
 
 (function () {
 	'use strict';
