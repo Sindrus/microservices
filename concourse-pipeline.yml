@@ -11,4 +11,4 @@ jobs:
     - get: microservices
       trigger: true
     - task: tests
-      file: frontend/concourse-build.yml
+      file: concourse-build.yml
