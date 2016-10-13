@@ -1,0 +1,14 @@
+resources:
+  - name: microservices
+    type: git
+    source:
+       uri: https://github.com/sindrus/microservices
+       branch: master
+
+jobs:
+  - name: frontend
+    plan:
+    - get: microservices
+      trigger: true
+    - task: tests
+      file: frontend/concourse-build.yml
