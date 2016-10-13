@@ -22,6 +22,7 @@ jobs:
   - name: frontend-build-image-job
     plan:
     - get: microservices
+      trigger: true
       passed: [frontend-test]
     - put: frontend_build_docker_image
       params: {build: microservices/frontend}
