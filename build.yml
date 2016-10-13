@@ -5,9 +5,7 @@ image_resource:
   source: {repository: busybox}
 
 inputs:
-  - name: frontend
-    path: .
+  - name: microservices
 
 run:
-  path: ./test.sh
-
+  path: microservices/frontend/test.sh

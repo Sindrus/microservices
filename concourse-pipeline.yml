@@ -6,9 +6,8 @@ resources:
        branch: master
 
 jobs:
-  - name: frontend
+  - name: frontend-test
     plan:
     - get: microservices
-      trigger: true
-    - task: tests
-      file: concourse-build.yml
+    - task: testing
+      file: microservices/build.yml
