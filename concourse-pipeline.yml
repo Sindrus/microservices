@@ -9,5 +9,6 @@ jobs:
   - name: frontend-test
     plan:
     - get: microservices
+      trigger: true
     - task: testing
       file: microservices/build.yml
