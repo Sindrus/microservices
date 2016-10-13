@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM python:alpine
 COPY . /src/
 WORKDIR "/src"
 CMD [ "python", "-m", "http.server" ]
