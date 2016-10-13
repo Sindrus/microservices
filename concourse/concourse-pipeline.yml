@@ -2,7 +2,7 @@ resources:
   - name: microservices
     type: git
     source:
-       uri: https://github.com/sindrus/microservices
+       uri: git@github.com/sindrus/microservices.git
        branch: master
 
 jobs:
