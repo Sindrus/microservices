@@ -11,4 +11,4 @@ jobs:
     - get: microservices
       trigger: true
     - task: testing
-      file: microservices/build.yml
+      file: microservices/concourse/frontend-test.yml
