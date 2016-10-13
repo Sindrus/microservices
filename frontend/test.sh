@@ -2,3 +2,4 @@
 
 echo OK
 echo $(pwd)
+echo Added line
