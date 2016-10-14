@@ -1,0 +1,11 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: alpine}
+
+inputs:
+  - name: microservices
+
+run:
+  path: microservices/frontend/marathonput.sh
