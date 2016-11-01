@@ -4,7 +4,8 @@
 /*jshint newcap:false */
 var app = app || {};
 
-var backendIP = 'http://192.168.65.60:8080';
+var backendIP = 'http://sindrus.net';
+
 
 (function () {
 	'use strict';
