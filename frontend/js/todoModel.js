@@ -4,7 +4,7 @@
 /*jshint newcap:false */
 var app = app || {};
 
-var backendIP = 'http://sindrus.net';
+var backendIP = 'http://sindrus.net:8888';
 
 
 (function () {
